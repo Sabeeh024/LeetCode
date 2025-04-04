@@ -17,11 +17,14 @@
 var twoSum = function (nums, target) {
     console.log(`Input: `, { nums, target })
 
-    const previouslyVisitedNumbers = {};
+    const visitedElements = new Map();
     for (let i = 0; i < nums.length; i++) {
-        if (previouslyVisitedNumbers.hasOwnProperty(target - nums[i])) return [i, previouslyVisitedNumbers[target - nums[i]]];
-        previouslyVisitedNumbers[nums[i]] = i;
+        const complement = target - nums[i];
+        if (visitedElements.has(complement)) return [visitedElements.get(complement), i];
+        visitedElements.set(nums[i], i);
     }
+
+    return [];
 };
 
 console.log(twoSum([2, 7, 11, 15], 9)); // example # 1 : Expected Output: [ 1, 0 ]
