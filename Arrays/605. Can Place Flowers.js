@@ -1,11 +1,18 @@
 /**
- * Problem: Contains Duplicate
+ * Problem: Can Place Flowers
  *
  * Approach:
- * 
- * Time Complexity:
- * 
- * Space Complexity: 
+ * - Iterate through the flowerbed.
+ * - For each empty plot (0), check if both adjacent plots are also empty or out of bounds.
+ * - If so, plant a flower there (set to 1) and decrement `n`.
+ * - Skip the next plot since adjacent planting is not allowed.
+ * - Early return if `n` reaches 0 before the end of the loop.
+ *
+ * Time Complexity: O(n)
+ * - We traverse the array once, doing constant-time checks and updates per element.
+ *
+ * Space Complexity: O(1)
+ * - We do everything in-place and use only a few extra variables.
  */
 
 /**
@@ -14,33 +21,25 @@
  * @return {boolean}
  */
 var canPlaceFlowers = function (flowerbed, n) {
-    const ones = []
+    let i = 0;
+    const len = flowerbed.length;
 
-    for (let i = 0; i < flowerbed.length; i++) {
-        if (flowerbed[i] === 1) ones.push(i)
-    }
-
-    if (ones.length === 0) n -= Math.floor((flowerbed.length + 1) / 2);
-
-    for (let i = 0; i < ones.length; i++) {
-        if (i === 0 && ones[i] != 0) {
-            const diff = ones[i]
-            n -= Math.floor(diff / 2)
-            if (i === ones.length - 1) {
-                const diff = (flowerbed.length - 1) - ones[i]
-                n -= Math.floor(diff / 2)
-            }
-        } else if (i === ones.length - 1 && ones[i] != flowerbed.length - 1) {
-            const diff = (flowerbed.length - 1) - ones[i]
-            n -= Math.floor(diff / 2)
+    while (i < len) {
+        if (
+            flowerbed[i] === 0 &&
+            (i === 0 || flowerbed[i - 1] === 0) &&
+            (i === len - 1 || flowerbed[i + 1] === 0)
+        ) {
+            flowerbed[i] = 1;
+            n--;
+            if (n === 0) return true;
+            i += 2;
         } else {
-            if (i === ones.length - 1) continue;
-            const diff = (ones[i + 1] - ones[i])
-            n -= Math.floor((diff - 2) / 2)
-            if ((i + 1) === ones.length - 1) continue;
+            i++;
         }
     }
-    return n <= 0
+
+    return n <= 0;
 };
 
 console.log(canPlaceFlowers([1, 0, 0, 0, 1], 1)) // example # 1 : Expected Output: true
